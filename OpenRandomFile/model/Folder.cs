@@ -56,7 +56,12 @@ namespace OpenRandomFile.model {
             BinaryWriter bw = new BinaryWriter(fs, encoding);
             BinaryReader br = new BinaryReader(fs, encoding);
 
-            fs.Seek(29, SeekOrigin.Begin);
+            fs.Seek(4, SeekOrigin.Begin);
+            int oldCount = br.ReadInt32();
+            fs.Seek(-4, SeekOrigin.Current);
+            bw.Write(oldCount - 1);
+
+            fs.Seek(21, SeekOrigin.Current);
 
             ushort i = 0;
             string res = "";
