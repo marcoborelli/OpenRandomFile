@@ -1,0 +1,19 @@
+Windows Registry Editor Version 5.00
+
+;when you open the context menu into the folder (you are inside)
+[HKEY_CLASSES_ROOT\Directory\Background\shell\<name>]
+"MUIVerb"="<name_you_want_to_see_in_menu>"
+"Icon"="<icon_path>" ;optional
+"Position"="Top" ;optional
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\<name>\command]
+@="<program_path> \"%V\""
+
+;when you open the context menu by clicking on the folder (you are outside)
+[HKEY_CLASSES_ROOT\Directory\shell\<name>]
+"MUIVerb"="<name_you_want_to_see_in_menu>"
+"Icon"="<icon_path>" ;optional
+"Position"="Top" ;optional
+
+[HKEY_CLASSES_ROOT\Directory\shell\<name>\command]
+@="<program_path> \"%V\""
