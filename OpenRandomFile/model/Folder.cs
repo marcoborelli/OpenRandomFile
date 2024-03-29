@@ -66,18 +66,20 @@ namespace OpenRandomFile.model {
             ushort i = 0;
             string res = "";
 
-            while (i < index && fs.Position < fs.Length) {
+            do {
                 if (br.ReadBoolean())
                     i++;
 
-                if (i == index) {
+                // nel caso in cui index sia 0 e' un caso speciale
+                if ((i == index && index != 0) || (i == 1 && index == 0)) {
                     fs.Seek(-1, SeekOrigin.Current);
                     bw.Write(false); // sovrascrivo il vecchio bool
                     res = br.ReadString().Trim();
+                    break;
                 } else { // se non e' la riga che mi interessa mi sposot in avanti per saltare la stringa con il nome del file
                     fs.Seek(255, SeekOrigin.Current);
                 }
-            }
+            } while (fs.Position < fs.Length);
 
             br.Close();
             bw.Close();
