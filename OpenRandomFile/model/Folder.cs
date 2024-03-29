@@ -44,11 +44,30 @@ namespace OpenRandomFile.model {
             ushort maxIndex = GetValidFilesCount();
 
             if (maxIndex == 0) {
-                //todo
+                SetAllFileNotViewed();
             }
 
             int fileIndex = rnd.Next(0, maxIndex);
             return GetFileNameAndUpdateFile(fileIndex);
+        }
+
+        private void SetAllFileNotViewed() {
+            var fs = new FileStream($"{Settings.Instance.FilesPath}{DirInfo.Name}", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            BinaryWriter bw = new BinaryWriter(fs, encoding);
+            BinaryReader br = new BinaryReader(fs, encoding);
+
+            int totNum = br.ReadInt32();
+            bw.Write(totNum); // metto che i file non visti sono uguali al numero di file totali
+
+            fs.Seek(21, SeekOrigin.Current); //salto la data
+
+            while (fs.Position < fs.Length) {
+                bw.Write(true);
+                fs.Seek(255, SeekOrigin.Current);
+            }
+
+            bw.Close();
+            fs.Close();
         }
 
         private string GetFileNameAndUpdateFile(int index) {
