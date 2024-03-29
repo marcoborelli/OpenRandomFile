@@ -67,7 +67,7 @@ namespace OpenRandomFile.model {
             string res = "";
 
             do {
-                if (br.ReadBoolean())
+                if (br.ReadBoolean() || Settings.Instance.OpenAgain)
                     i++;
 
                 // nel caso in cui index sia 0 e' un caso speciale
