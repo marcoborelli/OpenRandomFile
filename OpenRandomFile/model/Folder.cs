@@ -28,26 +28,29 @@ namespace OpenRandomFile.model {
         }
 
         public string ChooseRandomFile() {
+            ushort maxIndex = 0;
+
             if (!File.Exists($"{Settings.Instance.FilesPath}{DirInfo.Name}")) {
                 SearchOption opt = Settings.Instance.CheckSubFolders ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
 
                 FileInfo[] files = DirInfo.GetFiles($"*.{Settings.Instance.Extension}", opt);
                 CreateFile(files);
+
+                maxIndex = (ushort)files.Length;
+            } else {
+                if (CheckIfDirectoryChanged()) {
+                    //todo
+                }
+
+                maxIndex = GetValidFilesCount();
             }
 
-            if (CheckIfDirectoryChanged()) {
-                //todo
-            }
-
-            Random rnd = new Random();
-
-            ushort maxIndex = GetValidFilesCount();
 
             if (maxIndex == 0) {
                 SetAllFileNotViewed();
             }
 
-            int fileIndex = rnd.Next(0, maxIndex);
+            int fileIndex = new Random().Next(0, maxIndex);
             return GetFileNameAndUpdateFile(fileIndex);
         }
 
